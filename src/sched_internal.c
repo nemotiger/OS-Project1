@@ -17,8 +17,9 @@ void *InitScheduler(const char *policy, const PsInfo *ps, int n_ps) {
     ctx->ps = psinfo_sched;
     ctx->n_ps = n_ps;
     ctx->time = -1;
+    ctx->i = 0;
     ctx->NextPs = NULL;
-    ctx->ctx = NULL;
+    ctx->__ctx = NULL;
 
     if(strcmp(policy, "FIFO") == 0)
         InitCtx_FIFO(ctx);

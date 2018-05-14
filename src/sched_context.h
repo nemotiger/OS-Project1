@@ -16,6 +16,7 @@ struct _SchedCtx {
     int n_ps;
     pid_t (*NextPs)(struct _SchedCtx *sched_ctx, int *terminated);
     int time;
+    int i;
     void *__ctx;
 };
 typedef struct _SchedCtx SchedCtx;
