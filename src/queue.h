@@ -13,7 +13,7 @@
 
 void *NewQueue(int capacity);
 void QueuePush(void *queue, PsInfo_Sched *ps);
-void PopQueuePop(void *queue);
+void QueuePop(void *queue);
 PsInfo_Sched *QueueFront(void *queue);
 void FreeQueue(void *queue);
 
