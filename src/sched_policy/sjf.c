@@ -36,8 +36,10 @@ pid_t NextPs_SJF(SchedCtx *ctx, int *terminated) {
     if(*finish_time == ctx->time)
         *terminated = 1;
 
-    if(ctx->i == *rq_end && ctx->ps[ctx->i].ready_time != ctx->time)
+    if(ctx->i == *rq_end && ctx->ps[ctx->i].ready_time != ctx->time) {
+        *finish_time = -1;
         return -1;
+    }
 
     int k;
     for(k = *rq_end; k < ctx->n_ps; ++k) {
