@@ -5,5 +5,6 @@
 
 void InitCtx_FIFO(SchedCtx *ctx);
 pid_t NextPs_FIFO(SchedCtx *ctx, int *terminated);
+void FreeInternalCtx_FIFO(void *__ctx);
 
 #endif

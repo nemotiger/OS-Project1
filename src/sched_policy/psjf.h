@@ -5,5 +5,6 @@
 
 void InitCtx_PSJF(SchedCtx *ctx);
 pid_t NextPs_PSJF(SchedCtx *ctx, int *terminated);
+void FreeInternalCtx_PSJF(void *__ctx);
 
 #endif

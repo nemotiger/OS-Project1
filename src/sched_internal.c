@@ -4,22 +4,15 @@
 #include "sched_context.h"
 #include "sched_policy/sched_policy.h"
 
-void *InitScheduler(const char *policy, const PsInfo *ps, int n_ps) {
+void *InitScheduler(const char *policy, PsInfo *ps, int n_ps) {
     SchedCtx *ctx = malloc(sizeof(SchedCtx));
-    PsInfo_Sched *psinfo_sched = malloc(n_ps * sizeof(PsInfo_Sched));
-
-    for(int i = 0; i < n_ps; ++i) {
-        psinfo_sched[i].ready_time = ps[i].ready_time;
-        psinfo_sched[i].exec_time = ps[i].exec_time;
-        psinfo_sched[i].pid = &ps[i].pid;
-    }
-
-    ctx->ps = psinfo_sched;
+    ctx->ps = ps;
     ctx->n_ps = n_ps;
     ctx->time = -1;
     ctx->i = 0;
-    ctx->NextPs = NULL;
     ctx->__ctx = NULL;
+    ctx->NextPs = NULL;
+    ctx->FreeInternalCtx = NULL;
 
     if(strcmp(policy, "FIFO") == 0)
         InitCtx_FIFO(ctx);
@@ -34,8 +27,7 @@ void *InitScheduler(const char *policy, const PsInfo *ps, int n_ps) {
 }
 
 void FreeScheduler(void *sched_ctx) {
-    free(((SchedCtx*)sched_ctx))->ps);
-    free(((SchedCtx*)sched_ctx))->__ctx);
+    ((SchedCtx*)sched_ctx)->FreeInternalCtx(((SchedCtx*)sched_ctx)->__ctx);
     free(sched_ctx);
 }
 

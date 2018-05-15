@@ -17,9 +17,15 @@ static int Min(int a, int b) {
 
 void InitCtx_RR(SchedCtx *ctx) {
     ctx->NextPs = NextPs_RR;
+    ctx->FreeInternalCtx = FreeInternalCtx_RR;
     ctx->__ctx = malloc(sizeof(Ctx));
     ((Ctx*)ctx->__ctx)->preempt_time = -1;
     ((Ctx*)ctx->__ctx)->queue = NewQueue(ctx->n_ps);
+}
+
+void FreeInternalCtx_RR(void *__ctx) {
+    FreeQueue(((Ctx*)__ctx)->queue);
+    free(__ctx);
 }
 
 pid_t NextPs_RR(SchedCtx *ctx, int *terminated) {
@@ -33,7 +39,7 @@ pid_t NextPs_RR(SchedCtx *ctx, int *terminated) {
         ++ctx->i;
     }
 
-    PsInfo_Sched *ps;
+    PsInfo *ps;
     if(ctx->time == *preempt_time) {
         ps = QueueFront(queue);
         QueuePop(queue);
@@ -44,7 +50,7 @@ pid_t NextPs_RR(SchedCtx *ctx, int *terminated) {
     }
     else if(*preempt_time >= 0) {
         ps = QueueFront(queue);
-        return *ps->pid;
+        return ps->pid;
     }
 
     if(QueueEmpty(queue)) {
@@ -56,6 +62,6 @@ pid_t NextPs_RR(SchedCtx *ctx, int *terminated) {
         int run_time = Min(ps->exec_time, TIME_QUANTUM);
         *preempt_time = ctx->time + run_time;
         ps->exec_time -= run_time;
-        return *ps->pid;
+        return ps->pid;
     }
 }

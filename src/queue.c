@@ -7,12 +7,12 @@ typedef struct {
     int size;
     int begin;
     int end;
-    PsInfo_Sched **arr;
+    PsInfo **arr;
 } Queue;
 
 void *NewQueue(int capacity) {
     Queue *q = malloc(sizeof(Queue));
-    q->arr = malloc(capacity * sizeof(PsInfo_Sched*));
+    q->arr = malloc(capacity * sizeof(PsInfo*));
     q->cap = capacity;
     q->size = 0;
     q->begin = 0;
@@ -20,7 +20,7 @@ void *NewQueue(int capacity) {
     return q;
 }
 
-void QueuePush(void *queue, PsInfo_Sched *ps) {
+void QueuePush(void *queue, PsInfo *ps) {
     Queue *q = queue;
     q->arr[q->end] = ps;
     q->end = (q->end + 1) % q->cap;
@@ -33,7 +33,7 @@ void QueuePop(void *queue) {
     --q->size;
 }
 
-PsInfo_Sched *QueueFront(void *queue) {
+PsInfo *QueueFront(void *queue) {
     return (Queue*)queue->arr[(Queue*)queue->begin];
 }
 
