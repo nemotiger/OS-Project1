@@ -1,4 +1,4 @@
-#include "fifo.h"
+#include "sched_policy/fifo.h"
 
 #include <stdlib.h>
 #include "queue.h"

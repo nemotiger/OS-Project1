@@ -1,4 +1,4 @@
-#include "sjf.h"
+#include "sched_policy/sjf.h"
 
 #include <stdlib.h>
 #include "priority_queue.h"
