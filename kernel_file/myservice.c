@@ -21,5 +21,5 @@ asmlinkage void sys_get_nstime(struct timespec *time) {
 asmlinkage void sys_log_pslifetime(struct timespec start) {
     struct timespec64 end;
     getnstimeofday64(&end);
-    printk("[Project1] %d %ld.%ld %ld.%ld\n", current->pid, start.tv_sec, start.tv_nsec, end.tv_sec, end.tv_nsec);
+    printk("[Project1] %d %ld.%.9ld %ld.%.9ld\n", current->pid, start.tv_sec, start.tv_nsec, end.tv_sec, end.tv_nsec);
 }
