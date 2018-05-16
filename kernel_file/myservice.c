@@ -1,6 +1,5 @@
 #include <linux/linkage.h>
 #include <linux/kernel.h>
-#include <linux/module.h>
 #include <uapi/linux/time.h>
 #include <linux/time.h>
 #include <linux/ktime.h>
@@ -22,6 +21,5 @@ asmlinkage void sys_get_nstime(struct timespec *time) {
 asmlinkage void sys_log_pslifetime(struct timespec start) {
     struct timespec64 end;
     getnstimeofday64(&end);
-    while(!printk_ratelimit());
     printk("[Project1] %d %ld.%ld %ld.%ld\n", current->pid, start.tv_sec, start.tv_nsec, end.tv_sec, end.tv_nsec);
 }

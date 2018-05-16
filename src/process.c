@@ -2,18 +2,11 @@
 #include <stdlib.h>
 #include <signal.h>
 #include "myservice.h"
-/*
-struct timespec tv_start;
-
-void LogProcessLifeTime() {
-    log_pslifetime(tv_start);
-}*/
 
 int main(int argc, char **argv) {
     struct timespec tv_start;
     get_nstime(&tv_start);
     raise(SIGSTOP);
-    //atexit(LogProcessLifeTime);
 
     int exec_time = atoi(argv[1]);
     volatile unsigned long i; 

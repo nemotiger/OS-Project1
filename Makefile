@@ -1,7 +1,7 @@
 BUILD_DIR := build
 OBJ_DIR := $(BUILD_DIR)/obj
 CC := gcc
-CFLAGS := -std=c11
+CFLAGS := -std=c11 -D_DEBUG
 INC :=
 RM := rm 
 

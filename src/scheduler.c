@@ -69,6 +69,7 @@ int main() {
             else {
                 sched_setscheduler(pid, SCHED_RR, &sched_max_priority);
                 sched_setaffinity(pid, sizeof(cpu_set_t), &cpu1);
+                waitpid(pid, NULL, WUNTRACED);
                 printf("%s %d\n", ps[next_start_idx].name, pid);
                 ps[next_start_idx].pid = pid;
 
@@ -87,7 +88,7 @@ int main() {
             #endif
 
             ++n_term;
-            //waitpid(running, NULL, 0);
+            waitpid(running, NULL, 0);
             running = -1;
         }
         if(next >= 0) {
@@ -113,9 +114,6 @@ int main() {
         
         ++time;
     }
-
-    for(int i = 0; i < n_ps; ++i)
-        waitpid(ps[i].pid, NULL, 0);
     
     FreeScheduler(sched_ctx);
     free(ps);
