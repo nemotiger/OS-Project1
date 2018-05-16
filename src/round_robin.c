@@ -1,4 +1,4 @@
-#include "sched_policy/round_robin.h"
+#include "round_robin.h"
 
 #include <stdlib.h>
 #include "queue.h"
@@ -34,7 +34,7 @@ pid_t NextPs_RR(SchedCtx *ctx, int *terminated) {
     void *queue = ((Ctx*)ctx->__ctx)->queue;
     *terminated = 0;
 
-    while(ctx->ps[ctx->i].ready_time == ctx->time) {
+    while(ctx->i < ctx->n_ps && ctx->ps[ctx->i].ready_time == ctx->time) {
         QueuePush(queue, ctx->ps + ctx->i);
         ++ctx->i;
     }

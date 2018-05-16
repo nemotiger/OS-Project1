@@ -1,4 +1,4 @@
-#include "sched_policy/fifo.h"
+#include "fifo.h"
 
 #include <stdlib.h>
 #include "queue.h"
@@ -11,7 +11,7 @@ typedef struct {
 
 void InitCtx_FIFO(SchedCtx *ctx) {
     ctx->NextPs = NextPs_FIFO;
-    ctx->FreeInternalCtx FreeInternalCtx_FIFO;
+    ctx->FreeInternalCtx = FreeInternalCtx_FIFO;
     ctx->__ctx = malloc(sizeof(Ctx));
     ((Ctx*)ctx->__ctx)->finish_time = -1;
     ((Ctx*)ctx->__ctx)->queue = NewQueue(ctx->n_ps);
@@ -28,7 +28,7 @@ pid_t NextPs_FIFO(SchedCtx *ctx, int *terminated) {
     void *queue = ((Ctx*)ctx->__ctx)->queue;
     *terminated = 0;
 
-    while(ctx->ps[ctx->i].ready_time == ctx->time) {
+    while(ctx->i < ctx->n_ps && ctx->ps[ctx->i].ready_time == ctx->time) {
         QueuePush(queue, ctx->ps + ctx->i);
         ++ctx->i;
     }

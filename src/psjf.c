@@ -33,7 +33,7 @@ void FreeInternalCtx_PSJF(void *__ctx) {
 
 pid_t NextPs_PSJF(SchedCtx *ctx, int *terminated) {
     ++ctx->time;
-    PQueue *pqueue = ((Ctx*)ctx->__ctx)->pqueue;
+    void *pqueue = ((Ctx*)ctx->__ctx)->pqueue;
     int *finish_time = &((Ctx*)ctx->__ctx)->finish_time;
     *terminated = 0;
 
@@ -45,13 +45,13 @@ pid_t NextPs_PSJF(SchedCtx *ctx, int *terminated) {
 
     PsInfo *ps;
 
-    if(ctx->ps[ctx->i].ready_time == ctx->time) {
+    if(ctx->i < ctx->n_ps && ctx->ps[ctx->i].ready_time == ctx->time) {
         if(*finish_time >= 0) {
             ps = PQueueFront(pqueue);
             ps->exec_time = *finish_time - ctx->time;
         }
 
-        while(ctx->ps[ctx->i].ready_time == ctx->time) {
+        while(ctx->i < ctx->n_ps && ctx->ps[ctx->i].ready_time == ctx->time) {
             PQueuePush(pqueue, ctx->ps + ctx->i);
             ++ctx->i;
         }

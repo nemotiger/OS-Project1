@@ -1,5 +1,5 @@
-#ifndef SCHED_POLICY_ROUND_ROBIN_H_
-#define SCHED_POLICY_ROUND_ROBIN_H_
+#ifndef ROUND_ROBIN_H_
+#define ROUND_ROBIN_H_
 
 #include "sched_context.h"
 

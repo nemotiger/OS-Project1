@@ -1,4 +1,4 @@
-#include "sched_policy/sjf.h"
+#include "sjf.h"
 
 #include <stdlib.h>
 #include "priority_queue.h"
@@ -34,10 +34,10 @@ void FreeInternalCtx_SJF(void *__ctx) {
 pid_t NextPs_SJF(SchedCtx *ctx, int *terminated) {
     ++ctx->time;
     int *finish_time = &((Ctx*)ctx->__ctx)->finish_time;
-    PQueue *pqueue = ((Ctx*)ctx->__ctx)->pqueue;
+    void *pqueue = ((Ctx*)ctx->__ctx)->pqueue;
     *terminated = 0;
 
-    while(ctx->ps[ctx->i].ready_time == ctx->time) {
+    while(ctx->i < ctx->n_ps && ctx->ps[ctx->i].ready_time == ctx->time) {
         PQueuePush(pqueue, ctx->ps + ctx->i);
         ++ctx->i;
     }

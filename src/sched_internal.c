@@ -1,8 +1,12 @@
 #include "sched_internal.h"
 
 #include <stdlib.h>
+#include <string.h>
 #include "sched_context.h"
-#include "sched_policy/sched_policy.h"
+#include "fifo.h"
+#include "sjf.h"
+#include "psjf.h"
+#include "round_robin.h"
 
 void *InitScheduler(const char *policy, PsInfo *ps, int n_ps) {
     SchedCtx *ctx = malloc(sizeof(SchedCtx));

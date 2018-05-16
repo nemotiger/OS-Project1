@@ -1,5 +1,5 @@
-#ifndef SCHED_POLICY_SJF_H_
-#define SCHED_POLICY_SJF_H_
+#ifndef SJF_H_
+#define SJF_H_
 
 #include "sched_context.h"
 

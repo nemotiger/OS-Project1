@@ -34,22 +34,22 @@ void QueuePop(void *queue) {
 }
 
 PsInfo *QueueFront(void *queue) {
-    return (Queue*)queue->arr[(Queue*)queue->begin];
+    return ((Queue*)queue)->arr[((Queue*)queue)->begin];
 }
 
 void FreeQueue(void *queue) {
-    free((Queue*)queue->arr);
+    free(((Queue*)queue)->arr);
     free(queue);
 }
 
 int QueueCapacity(void *queue) {
-    return (Queue*)queue->cap;
+    return ((Queue*)queue)->cap;
 }
 
 int QueueSize(void *queue) {
-    return (Queue*)queue->size;
+    return ((Queue*)queue)->size;
 }
 
 int QueueEmpty(void *queue) {
-    return (Queue*)queue->size == 0 ? 1 : 0;
+    return ((Queue*)queue)->size == 0 ? 1 : 0;
 }

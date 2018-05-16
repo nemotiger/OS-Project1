@@ -1,5 +1,5 @@
-#ifndef SCHED_POLICY_FIFO_H_
-#define SCHED_POLICY_FIFO_H_
+#ifndef FIFO_H_
+#define FIFO_H_
 
 #include "sched_context.h"
 

@@ -1,7 +1,7 @@
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 
-#define _GNU_SOURCE
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -20,6 +20,10 @@ static int PsInfo_Cmp(const void *lhs, const void *rhs) {
 }
 
 int main() {
+    #ifdef _DEBUG
+    printf("PID=%d\n", getpid());
+    #endif
+
     struct sched_param sched_max_priority;
     sched_max_priority.sched_priority = sched_get_priority_max(SCHED_RR);
     sched_setscheduler(0, SCHED_RR, &sched_max_priority);
@@ -44,14 +48,14 @@ int main() {
 
     qsort(ps, n_ps, sizeof(PsInfo), PsInfo_Cmp);
 
-    void *sched_ctx = InitScheduler(policy, psinfo, n_ps);
+    void *sched_ctx = InitScheduler(policy, ps, n_ps);
 
     int n_term = 0; /* number of terminated process */
     int time = 0;
 
     int next_start_idx = 0;
     int prev_terminated;
-    pid_t running, next;
+    pid_t running = -1, next;
 
     while(n_term < n_ps) {
 
@@ -60,36 +64,58 @@ int main() {
             if((pid = fork()) == 0) {
                 char argv1[20];
                 sprintf(argv1, "%d", ps[next_start_idx].exec_time);
-                execl("process", "process", argv1, (char*)NULL);
+                execl("./process", "./process", argv1, (char*)NULL);
             }
             else {
                 sched_setscheduler(pid, SCHED_RR, &sched_max_priority);
                 sched_setaffinity(pid, sizeof(cpu_set_t), &cpu1);
                 printf("%s %d\n", ps[next_start_idx].name, pid);
                 ps[next_start_idx].pid = pid;
+
+                #ifdef _DEBUG
+                printf("START %s, PID=%d, TIME=%d\n", ps[next_start_idx].name, ps[next_start_idx].pid, time);
+                #endif
+
                 ++next_start_idx;
             }
         }
 
         next = SchedNextPs(sched_ctx, &prev_terminated);
         if(prev_terminated) {
+            #ifdef _DEBUG
+            printf("[EXIT] %d, TIME=%d\n", running, time);
+            #endif
+
             ++n_term;
-            waitpid(running, NULL, 0);
-        }
-        if(next >= 0 && next != running) {
-            if(!prev_terminated && running >= 0)
-                kill(running, SIGSTOP);
-            
-            kill(next, SIGCONT);
-            running = next;
-        }
-        else
+            //waitpid(running, NULL, 0);
             running = -1;
+        }
+        if(next >= 0) {
+            if(running < 0) {
+                #ifdef _DEBUG
+                printf("[RUN] %d, TIME=%d\n", next, time);
+                #endif
+                kill(next, SIGCONT);
+                running = next;
+            }
+            else if(next != running) {
+                #ifdef _DEBUG
+                printf("[STOP] %d, TIME=%d\n", running, time);
+                printf("[RUN] %d, TIME=%d\n", next, time);
+                #endif
+                kill(running, SIGSTOP);
+                kill(next, SIGCONT);
+                running = next;
+            }
+        }
         
         for(volatile unsigned long i = 0; i < 1000000UL; ++i);
         
         ++time;
     }
+
+    for(int i = 0; i < n_ps; ++i)
+        waitpid(ps[i].pid, NULL, 0);
     
     FreeScheduler(sched_ctx);
     free(ps);
