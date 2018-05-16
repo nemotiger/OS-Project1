@@ -169,12 +169,12 @@ P6 2409
     2. Theoretical finish time of each processes are calculated with premise of no context switch time.
 * Real Results:
     1. Exist context switch time.
-    2. The context switch simulated by our program requires more time than the context switch performs by the kernel scheduler since our program and child processes are scheduled by kernel scheduler and some operations require invoking system calls.
+    2. The context switch simulated by our program requires more time than the context switch performs by the kernel scheduler since our program and child processes are scheduled by kernel scheduler and some operations require invoking system calls.
     3. The finish time of each processes are greater than the theoretical values.
 > Reason of differences between theoretical and real results: context switch requires time.     
 
 ## Contribution of Each Members
-B05902036 夏瑜： implementation, report  
+B05902036 夏瑜： implementation, report  
 B05302248 翁茂慶： provide ideas  
 B05902084 吳俊飛： ?  
 B05902132 林敬文： ? 
