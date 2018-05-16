@@ -10,12 +10,19 @@ typedef struct {
 } Ctx;
 
 static int Cmp(const void *lhs, const void *rhs) {
-    if((*(const PsInfo**)lhs)->exec_time < (*(const PsInfo**)rhs)->exec_time)
+    const PsInfo *_lhs = *(const PsInfo**)lhs, *_rhs = *(const PsInfo**)rhs;
+    if(_lhs->exec_time < _rhs->exec_time)
         return -1;
-    else if((*(const PsInfo**)lhs)->exec_time == (*(const PsInfo**)rhs)->exec_time)
-        return 0;
-    else 
+    else if(_lhs->exec_time > _rhs->exec_time)
         return 1;
+    else {
+        if(_lhs->ready_time < _rhs->ready_time)
+            return -1;
+        else if(_lhs->ready_time == _rhs->ready_time)
+            return 0;
+        else 
+            return 1;
+    }
 }
 
 void InitCtx_PSJF(SchedCtx *ctx) {
